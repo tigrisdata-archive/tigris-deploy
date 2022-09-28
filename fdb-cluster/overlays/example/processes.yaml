@@ -1,0 +1,28 @@
+# This is a sample configuration for running a FoundationDB cluster.
+apiVersion: apps.foundationdb.org/v1beta1
+kind: FoundationDBCluster
+metadata:
+  name: fdb-cluster
+spec:
+  version: 7.1.7
+  processCounts:
+    log: 1
+    stateless: 1
+  processes:
+    general:
+      podTemplate:
+        spec:
+          containers:
+            - name: foundationdb
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 128Mi
+            - name: foundationdb-kubernetes-sidecar
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 128Mi
+                limits:
+                  cpu: 100m
+                  memory: 128Mi

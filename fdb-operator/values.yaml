@@ -50,7 +50,7 @@ containerSecurityContext:
   privileged: false
   capabilities:
     drop:
-    - all
+      - all
   readOnlyRootFilesystem: true
 
 nodeSelector: {}
@@ -80,5 +80,5 @@ initContainerSecurityContext:
   privileged: false
   capabilities:
     drop:
-    - all
+      - all
   readOnlyRootFilesystem: true
