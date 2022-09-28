@@ -1,0 +1,17 @@
+# This is a sample configuration for running a FoundationDB cluster.
+apiVersion: apps.foundationdb.org/v1beta1
+kind: FoundationDBCluster
+metadata:
+  name: fdb-cluster
+spec:
+  version: 7.1.7
+  databaseConfiguration:
+    # Redundancy mode - https://apple.github.io/foundationdb/configuration.html#single-datacenter-modes
+    # current only single datacenter redundancy modes are supported
+    # redundancy mode of tripe (F=3) calculates the process count as follows:
+    # coordinators = 2xF = 6, storage = 2xF + 1 = 7
+    # Default process counts
+    # logs = 3, proxies = 3, resolvers = 1, master = 1, cluster_controller = 1, rate_keeper = 1, data_distributor = 1
+    # stateless = proxies + resolvers + master + cluster_controller + rate_keeper + data_distributor
+    redundancy_mode: single
+    usable_regions: 1

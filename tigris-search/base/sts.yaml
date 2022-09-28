@@ -1,0 +1,106 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tigris-search
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tigris-search
+  updateStrategy:
+    type: RollingUpdate
+  serviceName: ts
+  podManagementPolicy: Parallel
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: tigris-search
+    spec:
+      serviceAccountName: typesense-service-account
+      containers:
+        - name: tigris-ts-node-mgr
+          image: tigrisdata/ts-node-mgr:latest
+          imagePullPolicy: Always
+          command:
+            - "/opt/ts-node-mgr"
+          args:
+            - "-nodesfile=/typesense/nodes"
+          volumeMounts:
+            - name: typesense-ephemeral
+              mountPath: /typesense
+        - name: tigris-search
+          command:
+            - "/usr/bin/typesense-server"
+            - "-d"
+            - "/data"
+            - "--api-port"
+            - "8108"
+            - "--peering-port"
+            - "8107"
+            - "--nodes"
+            - "/typesense/nodes"
+          readinessProbe:
+            exec:
+              command:
+                - /bin/bash
+                - /scripts/check_ready.sh
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+          resources:
+            limits:
+              cpu: "2"
+              memory: "1Gi"
+            requests:
+              cpu: "1"
+              memory: "512Mi"
+          env:
+            - name: TYPESENSE_DATA_DIR
+              value: /tmp
+            - name: TYPESENSE_API_KEY
+              value: ts_test_key
+          image: tigrisdata/typesense:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8108
+          volumeMounts:
+            - name: typesense-ephemeral
+              mountPath: /typesense
+            - name: data
+              mountPath: /data
+            - name: check-ready
+              mountPath: /scripts
+            - name: setup
+              mountPath: /setup
+      volumes:
+        - name: typesense-ephemeral
+          emptyDir: {}
+        - name: resolver
+          configMap:
+            defaultMode: 0744
+            name: resolver
+            items:
+              - key: resolver.sh
+                path: resolver.sh
+        - name: check-ready
+          configMap:
+            name: check-ready
+            defaultMode: 0744
+            items:
+              - key: check_ready.sh
+                path: check_ready.sh
+        - name: setup
+          configMap:
+            name: setup
+            items:
+              - key: initial-nodes
+                path: initial-nodes
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: "100Mi"

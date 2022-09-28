@@ -1,0 +1,13 @@
+# headless service used by cluster members to resolve ip's
+apiVersion: v1
+kind: Service
+metadata:
+  name: ts
+spec:
+  clusterIP: None
+  selector:
+    app.kubernetes.io/name: tigris-search
+  ports:
+    - name: http
+      port: 8108
+      targetPort: 8108
