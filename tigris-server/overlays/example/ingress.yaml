@@ -1,0 +1,78 @@
+# Copyright 2022 Tigris Data, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tigris-server
+  labels:
+    app.kubernetes.io/name: tigris-server
+    app.kubernetes.io/part-of: tigris
+    app.kubernetes.io/component: server
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: "/v1"
+            pathType: Prefix
+            backend:
+              service:
+                name: tigris-http
+                port:
+                  number: 80
+          - path: "/tigrisdata.v1.Tigris/"
+            pathType: Prefix
+            backend:
+              service:
+                name: tigris-grpc
+                port:
+                  number: 80
+          - path: "/tigrisdata.admin.v1.Admin/"
+            pathType: Prefix
+            backend:
+              service:
+                name: tigris-grpc
+                port:
+                  number: 80
+          - path: "/tigrisdata.auth.v1.Auth/"
+            pathType: Prefix
+            backend:
+              service:
+                name: tigris-grpc
+                port:
+                  number: 80
+          - path: "/tigrisdata.observability.v1.Observability/"
+            pathType: Prefix
+            backend:
+              service:
+                name: tigris-grpc
+                port:
+                  number: 80
+          - path: "/tigrisdata.management.v1.Management/"
+            pathType: Prefix
+            backend:
+              service:
+                name: tigris-grpc
+                port:
+                  number: 80
+          - path: "/HealthAPI/"
+            pathType: Prefix
+            backend:
+              service:
+                name: tigris-grpc
+                port:
+                  number: 80
