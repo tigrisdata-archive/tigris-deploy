@@ -1,0 +1,45 @@
+# Copyright 2022 Tigris Data, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+apiVersion: apps.foundationdb.org/v1beta1
+kind: FoundationDBCluster
+metadata:
+  name: fdb-cluster
+spec:
+  version: "{{ .Values.fdb_version | default "7.1.7" }}"
+  databaseConfiguration:
+    # Redundancy mode - https://apple.github.io/foundationdb/configuration.html#single-datacenter-modes
+    # current only single datacenter redundancy modes are supported
+    # redundancy mode of triple (F=3) calculates the process count as follows:
+    # coordinators = 2xF = 6, storage = 2xF + 1 = 7
+    # Default process counts
+    # logs = 3, proxies = 3, resolvers = 1, master = 1, cluster_controller = 1, rate_keeper = 1, data_distributor = 1
+    # stateless = proxies + resolvers + master + cluster_controller + rate_keeper + data_distributor
+    redundancy_mode: "{{ .Values.redundancy_mode | default "triple" }}"
+    usable_regions: {{ .Values.usable_regions | default 1 }}
+  processCounts:
+    {{- toYaml .Values.processCounts | nindent 4 }}  
+  processes:
+    general:
+      customParameters:
+        - "trace_format=json"
+      podTemplate:
+        spec:
+          containers:
+            - name: foundationdb
+              resources:
+                {{- toYaml .Values.resources | nindent 16 }}
+      volumeClaimTemplate:
+        spec:
+          {{- toYaml .Values.volumeClaim | nindent 10 }}
