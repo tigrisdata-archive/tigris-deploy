@@ -1,0 +1,108 @@
+# Copyright 2022 Tigris Data, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tigris-search
+spec:
+  replicas: {{ .Values.replicas | default 5 }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tigris-search
+  updateStrategy:
+    type: RollingUpdate
+  serviceName: {{ .Values.headless_service_name | default "ts" }}
+  podManagementPolicy: Parallel
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: tigris-search
+    spec:
+      serviceAccountName: {{ .Values.service_account_name | default "typesense-service-account" }}
+      containers:
+        - name: tigris-ts-node-mgr
+          image: tigrisdata/ts-node-mgr:latest
+          imagePullPolicy: Always
+          command:
+            - "/opt/ts-node-mgr"
+          args:
+            - "-nodesfile=/typesense/nodes"
+          volumeMounts:
+            - name: typesense-ephemeral
+              mountPath: /typesense
+        - name: tigris-search
+          command:
+            - "/usr/bin/typesense-server"
+            - "-d"
+            - "/data"
+            - "--api-port"
+            - "{{ .Values.api_port | default 8108 }}"
+            - "--peering-port"
+            - "{{ .Values.peering_port | default 8107 }}"
+            - "--nodes"
+            - "/typesense/nodes"
+          readinessProbe:
+            exec:
+              command:
+                - /bin/bash
+                - /scripts/check_ready.sh
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+          resources: 
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: TYPESENSE_DATA_DIR
+              value: /tmp
+            - name: TYPESENSE_API_KEY
+              value: ts_test_key
+          image: "{{ .Values.image }}"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: {{ .Values.api_port }}
+          volumeMounts:
+            - name: typesense-ephemeral
+              mountPath: /typesense
+            - name: data
+              mountPath: /data
+            - name: check-ready
+              mountPath: /scripts
+            - name: setup
+              mountPath: /setup
+      volumes:
+        - name: typesense-ephemeral
+          emptyDir: {}
+        - name: check-ready
+          configMap:
+            name: check-ready
+            defaultMode: 0744
+            items:
+              - key: check_ready.sh
+                path: check_ready.sh
+        - name: setup
+          configMap:
+            name: setup
+            items:
+              - key: initial-nodes
+                path: initial-nodes
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: "100Mi"
