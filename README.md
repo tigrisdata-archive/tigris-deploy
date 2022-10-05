@@ -23,6 +23,19 @@ Tested with k3s running on a 2 vCPU / 8G RAM node.
 
 # Deploy tigris-stack Helm Chart
 
+## Setup Chart dependencies
+
+```
+$ helm dependency build
+Getting updates for unmanaged Helm repositories...
+...Successfully got an update from the "https://kubernetes.github.io/ingress-nginx" chart repository
+Saving 5 charts
+Downloading ingress-nginx from repo https://kubernetes.github.io/ingress-nginx
+Deleting outdated charts
+```
+
+## Install `tigris-stack` Chart
+
 ```
 $ helm install tigris-stack tigris-stack -f tigris-stack/values-local.yaml
 W1004 12:08:25.459713 1244101 warnings.go:70] apps.foundationdb.org/v1beta1 FoundationDBCluster is deprecated; use apps.foundationdb.org/v1beta2 FoundationDBCluster
