@@ -63,7 +63,7 @@ tigris-search:
 
 ### Tigris Server related settings
 tigris-server:
-  image: tigrisdata/tigris:latest
+  image: tigrisdata/tigris:1.0.0-beta.6
 
   # Port allocated to the Tigris API
   api_port: 8080
@@ -88,3 +88,30 @@ tigris-server:
     requests:
       cpu: "200m"
       memory: "512Mi"
+
+victoria-metrics-single:
+  enabled: true
+  configMap: scrapeconfig
+  server:
+    scrape:
+      enabled: true
+      configMap: scrapeconfig
+
+grafana:
+  enabled: true
+  extraInitContainers:
+    - name: waitfor-victoriametrics
+      image: busybox:latest
+      command: ['sh', '-c', 'until nc -vz tigris-stack-victoria-metrics-single-server.default 8428 ; do echo "Waiting for victoriametrics..."; sleep 3; done;']
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: victoriametrics
+          type: prometheus
+          orgId: 1
+          url: http://tigris-stack-victoria-metrics-single-server.default:8428
+          access: proxy
+          isDefault: true
+          updateIntervalSeconds: 10
+          editable: true
