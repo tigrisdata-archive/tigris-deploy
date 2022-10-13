@@ -4,6 +4,8 @@ kind: FoundationDBCluster
 metadata:
   name: fdb-cluster
 spec:
+  databaseConfiguration:
+    redundancy_mode: single
   version: 7.1.7
   processCounts:
     log: 1
