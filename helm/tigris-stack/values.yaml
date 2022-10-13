@@ -13,6 +13,10 @@
 # limitations under the License.
 #
 
+enable-components:
+  vmsingle: false
+  vmcluster: false
+
 ### FoundationDB Cluster related settings
 fdb-cluster:
   usable_regions: 1

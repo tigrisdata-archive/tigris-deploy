@@ -22,4 +22,9 @@ data:
       cluster_file: "/mnt/fdb-config-volume/cluster-file"
 
     tracing:
+      enabled: true
       sample_rate: 0.0001
+
+    metrics:
+      enabled: true
+      
