@@ -13,5 +13,5 @@ spec:
     # Default process counts
     # logs = 3, proxies = 3, resolvers = 1, master = 1, cluster_controller = 1, rate_keeper = 1, data_distributor = 1
     # stateless = proxies + resolvers + master + cluster_controller + rate_keeper + data_distributor
-    redundancy_mode: single
+    redundancy_mode: triple
     usable_regions: 1
