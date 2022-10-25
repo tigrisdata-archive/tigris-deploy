@@ -21,9 +21,33 @@ metadata:
     app.kubernetes.io/part-of: tigris
     app.kubernetes.io/component: server
   annotations:
+    {{- if .Values.ingress_nginx.enabled }}
     nginx.ingress.kubernetes.io/rewrite-target: /
+    {{- end }}
+    {{- if .Values.ingress_aws.enabled }}
+    alb.ingress.kubernetes.io/load-balancer-name: {{ .Values.lb_name }}
+    alb.ingress.kubernetes.io/group.name: {{ .Values.lb_name }}
+    {{- if .Values.tls_hostname }}
+    external-dns.alpha.kubernetes.io/hostname: {{ .Values.tls_hostname }}
+    {{- end }}
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/conditions.tigris-grpc: |
+      [{"field":"http-header","httpHeaderConfig":{"httpHeaderName": "Content-Type", "values":["application/grpc"]}}]
+    alb.ingress.kubernetes.io/healthcheck-path: /v1/health
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/load-balancer-attributes: routing.http.drop_invalid_header_fields.enabled=true
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS-1-2-2017-01 # disable support for TLS 1.0, 1.1 and weak ciphers
+    alb.ingress.kubernetes.io/tags: service=tigris-server
+    alb.ingress.kubernetes.io/target-group-attributes: stickiness.enabled=true,stickiness.app_cookie.duration_seconds=10,stickiness.type=app_cookie,stickiness.app_cookie.cookie_name=Tigris-Tx-Id
+    alb.ingress.kubernetes.io/target-type: ip
+    external-dns.alpha.kubernetes.io/ingress-hostname-source: annotation-only
+    {{- end }}
 spec:
+  {{- if .Values.ingress_nginx.enabled }}
   ingressClassName: nginx
+  {{- end }}
   rules:
     - http:
         paths:
@@ -76,3 +100,8 @@ spec:
                 name: tigris-grpc
                 port:
                   number: {{ .Values.service_port | default 80 }}
+  {{- if and .Values.ingress_aws.enabled (ne .Values.tls_hostname "") }}
+  tls:
+    - hosts:
+        - {{ .Values.tls_hostname }}
+  {{- end }}

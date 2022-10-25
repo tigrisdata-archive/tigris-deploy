@@ -102,7 +102,12 @@ grafana:
   extraInitContainers:
     - name: waitfor-victoriametrics
       image: busybox:latest
-      command: ['sh', '-c', 'until nc -vz tigris-stack-victoria-metrics-single-server.default 8428 ; do echo "Waiting for victoriametrics..."; sleep 3; done;']
+      command:
+        [
+          "sh",
+          "-c",
+          'until nc -vz tigris-stack-victoria-metrics-single-server.default 8428 ; do echo "Waiting for victoriametrics..."; sleep 3; done;',
+        ]
   datasources:
     datasources.yaml:
       apiVersion: 1
@@ -115,3 +120,6 @@ grafana:
           isDefault: true
           updateIntervalSeconds: 10
           editable: true
+
+ingress-nginx:
+  enabled: true
