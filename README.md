@@ -91,3 +91,12 @@ persistentvolumeclaim/fdb-cluster-storage-1-data   Bound    pvc-a71b1576-fe83-4b
 NAME                                      CLASS   HOSTS   ADDRESS   PORTS   AGE
 ingress.networking.k8s.io/tigris-server   nginx   *                 80      3m42s
 ```
+
+# EKS Deployment
+
+EKS based deployments use AWS load balancers with annotations. ALBs can be enabled with:
+
+```
+ingress-aws:
+  enabled: true
+```

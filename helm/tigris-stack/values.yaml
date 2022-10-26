@@ -13,10 +13,6 @@
 # limitations under the License.
 #
 
-enable-components:
-  vmsingle: false
-  vmcluster: false
-
 ### FoundationDB Cluster related settings
 fdb-cluster:
   usable_regions: 1
@@ -92,3 +88,12 @@ tigris-server:
     requests:
       cpu: "1"
       memory: "512Mi"
+
+aws-load-balancer-controller:
+  clusterName: tigris-server
+
+grafana:
+  enabled: false
+
+victoria-metrics-single:
+  enabled: false

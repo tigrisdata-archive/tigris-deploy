@@ -38,3 +38,15 @@ resources:
   requests:
     cpu: "1"
     memory: "512Mi"
+
+# Enable TLS hostname
+tls_hostname: ""
+
+# Load balancer name
+lb_name: tigris-server-lb
+
+ingress_nginx:
+  enabled: false
+
+ingress_aws:
+  enabled: false
