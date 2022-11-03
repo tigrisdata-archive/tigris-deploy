@@ -56,7 +56,7 @@ spec:
               path: /v1/health
             failureThreshold: 6
             periodSeconds: 10
-          livenessProbe:
+          readinessProbe:
             httpGet:
               port: {{ .Values.api_port }}
               path: /v1/health
