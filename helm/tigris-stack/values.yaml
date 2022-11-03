@@ -46,7 +46,7 @@ tigris-search:
   peering_port: 8107
 
   ### How much storage to allocate
-  storage: "100Mi"
+  storage: "10Gi"
 
   ### Number of replicas
   replicas: 5
