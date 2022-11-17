@@ -32,7 +32,7 @@ spec:
       containers:
         - name: tigris-server
           image: tigrisdata/tigris:latest # Replace this with the version you want to run through kustomization
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           command: ["/server/service"]
           volumeMounts:
             - mountPath: /tmp

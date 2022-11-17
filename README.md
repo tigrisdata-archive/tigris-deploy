@@ -100,3 +100,21 @@ EKS based deployments use AWS load balancers with annotations. ALBs can be enabl
 ingress-aws:
   enabled: true
 ```
+
+# Local redundant cluster on kind
+
+Start a kind cluster first:
+
+```
+$ bash start-kind.sh
+```
+
+It uses kind-config.yaml, the kubernetes version can be controlled with the KUBERNETES_VERSION environment variable.
+
+Deploy the redundant cluster on the kind cluster.
+
+```
+$ bash deploy.sh redundant
+```
+
+
