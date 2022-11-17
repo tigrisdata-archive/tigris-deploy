@@ -39,7 +39,7 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           image: {{ .Values.image | default "tigrisdata/tigris:latest" }}
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           command: ["/server/service"]
           volumeMounts:
             - mountPath: /tmp

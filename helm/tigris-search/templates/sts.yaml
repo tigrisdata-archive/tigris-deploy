@@ -34,7 +34,7 @@ spec:
       containers:
         - name: tigris-ts-node-mgr
           image: tigrisdata/ts-node-mgr:latest
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           command:
             - "/opt/ts-node-mgr"
           args:
@@ -69,7 +69,7 @@ spec:
             - name: TYPESENSE_API_KEY
               value: ts_test_key
           image: "{{ .Values.image }}"
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: {{ .Values.api_port }}
           volumeMounts:
