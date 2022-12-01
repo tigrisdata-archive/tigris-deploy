@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ycsb
+  labels:
+    app.kubernetes.io/name: ycsb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ycsb
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ycsb
+    spec:
+      containers:
+        - name: ycsb
+          resources:
+            limits:
+              cpu: "8"
+              memory: "2Gi"
+            requests:
+              cpu: "2"
+              memory: "1Gi"
+          env:
+            - name: TIGRIS_URL
+              value: "tigris-grpc:80"
+            - name: LOADTHREADCOUNT
+              value: "16" 
+            - name: RECORDCOUNT
+              value: "1000000"
+            - name: RUNMODE
+              value: "multiple_threads" 
+            - name: DROPANDLOAD
+              value: "1" 
+            - name: RUNTHREADDURATION
+              value: "10m" 
+            - name: RUNTHREADSLEEPINTERVAL
+              value: "1m" 
+            - name: ENGINE
+              value: "foundationdb" 
+          volumeMounts:
+            - mountPath: /tmp
+              name: tmp
+            - mountPath: /mnt/fdb-config-volume
+              name: fdb-cluster-config-volume
+            - mountPath: /etc/tigrisdata/tigris
+              name: server-config-volume
+          image: "tigrisdata/ycsb:master" 
+          imagePullPolicy: IfNotPresent
+          command:
+            - "/run.sh"
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        # This configmap is created by the fdb-kubernetes-operator when the cluster is created
+        # The cluster-name below has to be replaced with the actual cluster name during kustomization phase
+        - name: fdb-cluster-config-volume
+          configMap:
+            name: fdb-cluster-config
+        # This configmap is created during the kustomization phase
+        - name: server-config-volume
+          configMap:
+            name: tigris-server-config

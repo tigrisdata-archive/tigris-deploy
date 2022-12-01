@@ -9,7 +9,7 @@ data:
     - job_name: vmagent
       static_configs:
       - targets:
-        - localhost:8429
+        - localhost:8428
     - bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
       job_name: kubernetes-apiservers
       kubernetes_sd_configs:

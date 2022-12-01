@@ -29,3 +29,11 @@ dependencies:
     version: 6.40.3
     repository: https://grafana.github.io/helm-charts
     condition: grafana.enabled
+  - name: metrics-server
+    version: 3.8.2
+    repository: https://kubernetes-sigs.github.io/metrics-server
+    condition: metrics-server.enabled
+  - name: ycsb
+    version: 0.1.0
+    repository: file://../ycsb
+    condition: ycsb.enabled

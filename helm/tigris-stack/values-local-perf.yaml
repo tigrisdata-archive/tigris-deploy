@@ -22,16 +22,16 @@ fdb-cluster:
 
   resources:
     requests:
-      cpu: "200m"
-      memory: "256Mi"
+      cpu: "1"
+      memory: "4Gi"
     limits:
-      cpu: "200m"
-      memory: "256Mi"
+      cpu: "1"
+      memory: "4Gi"
 
   volumeClaim:
     resources:
       requests:
-        storage: "16Gi"
+        storage: "10Gi"
 
   failureDetectionTimeSeconds: 300
   replaceInstancesWhenResourcesChange: true
@@ -50,7 +50,7 @@ tigris-search:
   peering_port: 8107
 
   ### How much storage to allocate
-  storage: "1Gi"
+  storage: "10Gi"
 
   ### Number of replicas
   replicas: 5
@@ -58,11 +58,11 @@ tigris-search:
   ### Resources to allocate
   resources:
     limits:
-      cpu: "100m"
-      memory: "256Mi"
+      cpu: "1"
+      memory: "4Gi"
     requests:
-      cpu: "100m"
-      memory: "256Mi"
+      cpu: "1"
+      memory: "4Gi"
 
 ### Tigris Server related settings
 tigris-server:
@@ -89,11 +89,11 @@ tigris-server:
   # Resources
   resources:
     limits:
-      cpu: "100m"
-      memory: "256Mi"
+      cpu: "1"
+      memory: "1Gi"
     requests:
-      cpu: "100m"
-      memory: "256Mi"
+      cpu: "1"
+      memory: "1Gi"
 
 victoria-metrics-single:
   enabled: true
@@ -155,7 +155,7 @@ ingress-nginx:
   enabled: true
 
 ycsb:
-  enabled: false
+  enabled: true
 
 metrics-server:
   enabled: true

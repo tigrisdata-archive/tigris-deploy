@@ -97,3 +97,6 @@ grafana:
 
 victoria-metrics-single:
   enabled: false
+
+ycsb:
+  enabled: false
