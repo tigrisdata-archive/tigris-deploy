@@ -9,7 +9,7 @@ grafana/grafana:latest
 busybox:latest
 victoriametrics/victoria-metrics:latest
 foundationdb/fdb-kubernetes-operator:v1.9.0
-tigrisdata/ycsb:debug
+tigrisdata/ycsb:master
 "
 
 KUBERNETES_VERSION=${KUBERNETES_VERSION:-1.21.14}
