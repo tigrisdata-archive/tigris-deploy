@@ -1,0 +1,7 @@
+apiVersion: v2
+name: ycsb
+description: Benchmark the deployed database with ycsb
+
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
