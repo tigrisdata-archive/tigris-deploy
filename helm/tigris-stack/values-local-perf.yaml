@@ -17,16 +17,23 @@
 fdb-cluster:
   usable_regions: 1
 
-  processCounts: {}
-  redundancy_mode: triple
+  processCounts: 
+    storage: 4
+    log: 4
+
+  databaseConfiguration:
+    storage: 4
+    logs: 4
+    
+  redundancy_mode: double
 
   resources:
     requests:
-      cpu: "1"
+      cpu: "100m"
       memory: "4Gi"
     limits:
       cpu: "1"
-      memory: "4Gi"
+      memory: "8Gi"
 
   volumeClaim:
     resources:
@@ -53,7 +60,7 @@ tigris-search:
   storage: "10Gi"
 
   ### Number of replicas
-  replicas: 5
+  replicas: 3
 
   ### Resources to allocate
   resources:
@@ -66,7 +73,7 @@ tigris-search:
 
 ### Tigris Server related settings
 tigris-server:
-  image: tigrisdata/tigris:1.0.0-beta.18
+  image: tigrisdata/tigris:1.0.0-beta.35
 
   # Port allocated to the Tigris API
   api_port: 8080
@@ -84,7 +91,7 @@ tigris-server:
     enabled: false
     
   # The number of Pods serving requests
-  replicas: 3
+  replicas: 6
 
   # Resources
   resources:

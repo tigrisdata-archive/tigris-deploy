@@ -18,6 +18,10 @@ metadata:
   name: fdb-cluster
 spec:
   version: "{{ .Values.fdb_version | default "7.1.7" }}"
+  # TODO move this to make it customizable
+  # faultDomain:
+  #   key: topology.kubernetes.io/zone
+  #   valueFrom: spec.zoneName
   databaseConfiguration:
     # Redundancy mode - https://apple.github.io/foundationdb/configuration.html#single-datacenter-modes
     # current only single datacenter redundancy modes are supported
@@ -30,6 +34,7 @@ spec:
     usable_regions: {{ .Values.usable_regions | default 1 }}
   processCounts:
     {{- toYaml .Values.processCounts | nindent 4 }}  
+
   processes:
     general:
       customParameters:

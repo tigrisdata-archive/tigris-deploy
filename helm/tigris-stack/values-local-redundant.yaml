@@ -17,8 +17,11 @@
 fdb-cluster:
   usable_regions: 1
 
-  processCounts: {}
-  redundancy_mode: triple
+  processCounts:
+    master: 1
+    coordinator: 3
+
+  redundancy_mode: double
 
   resources:
     requests:
@@ -155,7 +158,7 @@ ingress-nginx:
   enabled: true
 
 ycsb:
-  enabled: false
+  enabled: true
 
 metrics-server:
   enabled: true

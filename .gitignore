@@ -1,2 +1,5 @@
 # Downloaded helm charts
 *.tgz
+
+# idea
+.idea

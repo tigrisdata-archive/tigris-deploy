@@ -5,7 +5,7 @@ metadata:
   labels:
     app.kubernetes.io/name: ycsb
 spec:
-  replicas: 1
+  replicas: 12
   selector:
     matchLabels:
       app.kubernetes.io/name: ycsb
@@ -18,28 +18,47 @@ spec:
         - name: ycsb
           resources:
             limits:
-              cpu: "8"
-              memory: "2Gi"
+              cpu: "1"
+              memory: "256Mi"
             requests:
-              cpu: "2"
-              memory: "1Gi"
+              cpu: "1"
+              memory: "128Mi"
           env:
             - name: TIGRIS_URL
               value: "tigris-grpc:80"
+            - name: TIGRIS_POSTFIX_TESTDB
+              value: "1"
             - name: LOADTHREADCOUNT
-              value: "16" 
-            - name: RECORDCOUNT
-              value: "1000000"
-            - name: RUNMODE
-              value: "multiple_threads" 
-            - name: DROPANDLOAD
-              value: "1" 
-            - name: RUNTHREADDURATION
-              value: "10m" 
-            - name: RUNTHREADSLEEPINTERVAL
-              value: "1m" 
+              value: "4"
             - name: ENGINE
-              value: "foundationdb" 
+              value: "tigris"
+            - name: RUNMODE
+              value: "multiple_threads"
+            - name: RUNTHREADDURATION
+              value: "1h"
+            - name: RUNTHREADSLEEPINTERVAL
+              value: "1s"
+            - name: RECORDCOUNT
+              # for in-memory
+              value: "1000000"
+              # for on-disk
+              # value: "1000000"
+            - name: DROPANDLOAD
+              value: "1"
+            - name: READPROPORTION
+              value: "1.0"
+            - name: UPDATEPROPORTION
+              value: "0"
+            - name: SCANPROPORTION
+              value: "0"
+            - name: RUNTHREADCONF
+              value: "1"
+            - name: FIELDCOUNT
+              value: "10"
+            - name: FIELDLENGTH
+              value: "380"
+            - name: MAXSCANLENGTH
+              value: "20"
           volumeMounts:
             - mountPath: /tmp
               name: tmp

@@ -8,11 +8,11 @@ foundationdb/foundationdb-kubernetes-sidecar:7.1.7-1
 grafana/grafana:latest
 busybox:latest
 victoriametrics/victoria-metrics:latest
-foundationdb/fdb-kubernetes-operator:v1.9.0
+foundationdb/fdb-kubernetes-operator:latest
 tigrisdata/ycsb:master
 "
 
-KUBERNETES_VERSION=${KUBERNETES_VERSION:-1.21.14}
+KUBERNETES_VERSION=${KUBERNETES_VERSION:-1.23.13}
 
 for container in ${CONTAINERS}
 do
