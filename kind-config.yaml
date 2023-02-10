@@ -18,7 +18,3 @@ nodes:
     extraMounts:
       - hostPath: /storage
         containerPath: /var/local-path-provisioner
-  - role: worker
-    extraMounts:
-      - hostPath: /storage
-        containerPath: /var/local-path-provisioner

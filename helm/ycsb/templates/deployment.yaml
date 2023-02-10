@@ -5,7 +5,7 @@ metadata:
   labels:
     app.kubernetes.io/name: ycsb
 spec:
-  replicas: 10
+  replicas: 4
   selector:
     matchLabels:
       app.kubernetes.io/name: ycsb
@@ -21,7 +21,7 @@ spec:
               cpu: "1"
               memory: "256Mi"
             requests:
-              cpu: "1"
+              cpu: "100m"
               memory: "128Mi"
           env:
             - name: TIGRIS_URL
@@ -40,9 +40,9 @@ spec:
               value: "1s"
             - name: RECORDCOUNT
               # for in-memory
-              value: "10000000"
+              value: "31200000"
               # for on-disk
-              # value: "1000000"
+              # value: "8000000"
             - name: DROPANDLOAD
               value: "1"
             - name: READPROPORTION
@@ -52,7 +52,7 @@ spec:
             - name: SCANPROPORTION
               value: "0"
             - name: RUNTHREADCONF
-              value: "8"
+              value: "16"
             - name: FIELDCOUNT
               value: "10"
             - name: FIELDLENGTH

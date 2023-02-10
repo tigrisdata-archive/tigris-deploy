@@ -91,12 +91,12 @@ tigris-server:
     enabled: false
     
   # The number of Pods serving requests
-  replicas: 6
+  replicas: 3
 
   # Resources
   resources:
     limits:
-      cpu: "1"
+      cpu: "4"
       memory: "1Gi"
     requests:
       cpu: "1"
