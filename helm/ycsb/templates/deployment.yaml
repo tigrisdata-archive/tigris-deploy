@@ -5,7 +5,7 @@ metadata:
   labels:
     app.kubernetes.io/name: ycsb
 spec:
-  replicas: 12
+  replicas: 10
   selector:
     matchLabels:
       app.kubernetes.io/name: ycsb
@@ -40,7 +40,7 @@ spec:
               value: "1s"
             - name: RECORDCOUNT
               # for in-memory
-              value: "1000000"
+              value: "10000000"
               # for on-disk
               # value: "1000000"
             - name: DROPANDLOAD
@@ -52,7 +52,7 @@ spec:
             - name: SCANPROPORTION
               value: "0"
             - name: RUNTHREADCONF
-              value: "1"
+              value: "8"
             - name: FIELDCOUNT
               value: "10"
             - name: FIELDLENGTH
